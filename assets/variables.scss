@@ -2,3 +2,21 @@
 //
 // The variables you want to modify
 // $font-size-root: 20px;
+
+$body-font-family: WYekan;
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+$font-size-root: 16px;
+
+$text-field-outlined-fieldset-border-width: 0px;
+$text-field-outlined-fieldset-border: 0px solid currentColor !default;
