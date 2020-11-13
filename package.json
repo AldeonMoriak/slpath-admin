@@ -15,9 +15,12 @@
     "@nuxtjs/auth": "^4.9.1",
     "@nuxtjs/axios": "^5.12.2",
     "core-js": "^3.6.5",
-    "nuxt": "^2.14.6"
+    "nuxt": "^2.14.6",
+    "vue-class-component": "^7.2.6"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-proposal-decorators": "^7.12.1",
     "@mdi/font": "^5.8.55",
     "@nuxt/types": "^2.14.6",
     "@nuxt/typescript-build": "^2.0.3",

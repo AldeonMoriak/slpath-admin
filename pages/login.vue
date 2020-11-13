@@ -15,7 +15,12 @@
         outlined
         label="رمز عبور"
       ></v-text-field>
-      <v-btn block class="d-flex justify-center" large color="primary"
+      <v-btn
+        block
+        class="d-flex justify-center"
+        large
+        color="primary"
+        @click="login"
         >ورود</v-btn
       >
     </v-card>
@@ -24,20 +29,27 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import Component from 'vue-class-component'
 
 interface LoginDTO {
-  firstName: string
-  lastName: string
+  username: string
+  password: string
 }
-export default Vue.extend({
-  name: 'Login',
-  data() {
-    return {
-      credentials: {
-        username: '',
-        password: '',
-      },
-    }
-  },
-})
+@Component
+export default class Login extends Vue {
+  credentials: LoginDTO = {
+    username: '',
+    password: '',
+  }
+
+  $auth: any
+
+  async login(): Promise<void> {
+    try {
+      const response = await this.$auth.loginWith('local', {
+        data: this.credentials,
+      })
+    } catch (err) {}
+  }
+}
 </script>
