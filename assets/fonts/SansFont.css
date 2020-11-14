@@ -83,11 +83,11 @@ body {
   opacity: 0;
 }
 
-.v-data-footer__select,
+/* .v-data-footer__select,
 .v-data-footer__icons-before,
 .v-data-footer__icons-after {
   display: none !important;
-}
+} */
 
 .v-data-footer__pagination {
   padding: 5px;

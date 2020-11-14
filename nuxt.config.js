@@ -43,7 +43,7 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    baseURL: 'http://localhost:4000/',
+    baseURL: 'http://localhost:3000/',
   },
 
   router: {
@@ -51,6 +51,12 @@ export default {
   },
 
   auth: {
+    redirect: {
+      login: '/login',
+      logout: '/login',
+      callback: '/login',
+      home: false,
+    },
     strategies: {
       local: {
         endpoints: {
@@ -60,7 +66,7 @@ export default {
             propertyName: 'access_token',
           },
           user: { url: 'admin', method: 'get', propertyName: 'user' },
-          logout: { url: '/api/auth/logout', method: 'post' },
+          logout: { url: 'auth/logout', method: 'get' },
         },
         // tokenRequired: true,
         // tokenType: 'bearer',
@@ -92,20 +98,20 @@ export default {
         dark: {
           primary: colors.blue.darken2,
           accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
+          secondary: colors.teal.accent4,
+          info: '#ECE2D0',
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
           success: colors.green.accent3,
         },
         light: {
-          primary: '#5867dd',
+          primary: '#3C7A89',
           background: '#edeef4',
-          accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
+          accent: '#522596',
+          secondary: '#7FD1B9',
           info: colors.teal.lighten1,
           warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
+          error: '#FB5012',
           success: colors.green.accent3,
         },
       },

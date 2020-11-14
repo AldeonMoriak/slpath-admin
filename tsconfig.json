@@ -19,7 +19,8 @@
       "@types/node",
       "@types/nuxtjs__auth",
       "@nuxt/types",
-      "@nuxtjs/axios"
+      "@nuxtjs/axios",
+      "vuetify"
     ]
   },
   "exclude": ["node_modules", ".nuxt", "dist"]
