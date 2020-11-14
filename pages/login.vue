@@ -13,6 +13,7 @@
         v-model="credentials.password"
         background-color="grey lighten-4"
         outlined
+        type="password"
         label="رمز عبور"
       ></v-text-field>
       <v-btn
@@ -41,8 +42,6 @@ export default class Login extends Vue {
     username: '',
     password: '',
   }
-
-  $auth: any
 
   async login(): Promise<void> {
     try {

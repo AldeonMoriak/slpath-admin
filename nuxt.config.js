@@ -43,7 +43,7 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    baseUrl: 'http://localhost:3000/',
+    baseURL: 'http://localhost:4000/',
   },
 
   router: {
@@ -59,8 +59,8 @@ export default {
             method: 'post',
             propertyName: 'access_token',
           },
+          user: { url: 'admin', method: 'get', propertyName: 'user' },
           logout: { url: '/api/auth/logout', method: 'post' },
-          user: { url: '/api/auth/user', method: 'get', propertyName: 'user' },
         },
         // tokenRequired: true,
         // tokenType: 'bearer',
