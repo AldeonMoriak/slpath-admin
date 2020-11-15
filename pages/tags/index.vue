@@ -9,8 +9,8 @@
         :options.sync="options"
         class="elevation-8"
       >
-        <template v-slot:[`item.actions`]="{ item }">
-          <v-btn color="secondary" @click="$router.push(`/brands/${item.id}`)">
+        <!-- <template v-slot:[`item.actions`]="{ item }">
+          <v-btn color="secondary" @click="$router.push(`/tags/${item.id}`)">
             ویرایش</v-btn
           >
           <v-btn
@@ -20,7 +20,28 @@
             color="error"
             @click="deleteTag(item)"
             >حذف</v-btn
+          > -->
+        <!-- </template> -->
+        <template v-slot:[`item.title`]="props">
+          <v-edit-dialog
+            :return-value.sync="props.item.title"
+            @save="save"
+            @cancel="cancel"
+            @open="open"
+            @close="close"
           >
+            {{ props.item.title }}
+            <template v-slot:input>
+              <v-text-field
+                v-model="props.item.title"
+                :loading="props.item.loading"
+                :rules="[max25chars]"
+                label="ویرایش"
+                single-line
+                counter
+              ></v-text-field>
+            </template>
+          </v-edit-dialog>
         </template>
       </v-data-table>
     </div>
@@ -30,6 +51,19 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
+
+interface Tag {
+  title: string
+  admin: string
+  createdDateTime: Date
+  updateDateTime: Date
+  editor: string
+}
+
+interface TagResponse {
+  tag: Tag
+  message: string
+}
 
 @Component
 export default class Tags extends Vue {
@@ -49,6 +83,8 @@ export default class Tags extends Vue {
       .delete(`tags/deleteTag/${item.id}`)
       .then(() => this.getAllTags())
   }
+
+  async editTag(item: Tag): Promise<>
 
   async getAllTags(): Promise<void> {
     this.loading = true
