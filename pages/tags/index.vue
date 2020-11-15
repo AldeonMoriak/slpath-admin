@@ -56,6 +56,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
+<<<<<<< HEAD
 interface RAdmin {
   name: string
 }
@@ -69,6 +70,14 @@ interface Tag {
   editor: RAdmin
   loading: boolean
   rowNumber: number
+=======
+interface Tag {
+  title: string
+  admin: string
+  createdDateTime: Date
+  updateDateTime: Date
+  editor: string
+>>>>>>> ca4801abf966ac158c3b534e9e31aa430001ed50
 }
 
 interface TagResponse {
@@ -95,6 +104,7 @@ export default class Tags extends Vue {
       .then(() => this.getAllTags())
   }
 
+<<<<<<< HEAD
   async editTag(item: Tag): Promise<void> {
     console.log(item)
     const tag = await this.$axios
@@ -108,6 +118,9 @@ export default class Tags extends Vue {
   open() {}
 
   close() {}
+=======
+  async editTag(item: Tag): Promise<>
+>>>>>>> ca4801abf966ac158c3b534e9e31aa430001ed50
 
   async getAllTags(): Promise<void> {
     this.loading = true
