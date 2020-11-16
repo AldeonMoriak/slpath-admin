@@ -1,36 +1,51 @@
 <template>
   <v-card class="pa-2" width="100%" height="100%">
-    <v-dialog v-model="dialog" max-width="500px">
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-          تگ جدید
-        </v-btn>
-      </template>
-      <v-card>
-        <v-card-title>
-          <span class="headline">ایجاد تگ</span>
-        </v-card-title>
+    <v-row>
+      <v-col cols="4">
+        <v-card-title>مدیریت تگ ها</v-card-title>
+      </v-col>
+      <v-spacer></v-spacer>
+      <v-col cols="2">
+        <v-dialog v-model="dialog" max-width="500px">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              color="primary"
+              dark
+              class="mb-2 mt-2"
+              v-bind="attrs"
+              v-on="on"
+            >
+              تگ جدید
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-title>
+              <span class="headline">ایجاد تگ</span>
+            </v-card-title>
 
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field
-                  v-model="newItem.title"
-                  label="عنوان تگ"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="newItem.title"
+                      label="عنوان تگ"
+                      @keypress.enter="onSaveNewTag"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="error" text @click="closeDialog">بستن</v-btn>
-          <v-btn color="primary" text @click="onSaveNewTag">ثبت</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="error" text @click="closeDialog">بستن</v-btn>
+              <v-btn color="primary" text @click="onSaveNewTag">ثبت</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-col>
+    </v-row>
     <div>
       <v-data-table
         disable-sort
@@ -40,10 +55,7 @@
         :options.sync="options"
         class="elevation-8"
       >
-        <!-- <template v-slot:[`item.actions`]="{ item }">
-          <v-btn color="secondary" @click="$router.push(`/tags/${item.id}`)">
-            ویرایش</v-btn
-          >
+        <template v-slot:[`item.actions`]="{ item }">
           <v-btn
             :key="item.id"
             :loading="item.loading"
@@ -51,8 +63,8 @@
             color="error"
             @click="deleteTag(item)"
             >حذف</v-btn
-          > -->
-        <!-- </template> -->
+          >
+        </template>
         <template v-slot:[`item.title`]="props">
           <v-edit-dialog
             :return-value.sync="props.item.title"
@@ -132,6 +144,7 @@ export default class Tags extends Vue {
       .post('tags/editTag', { title: item.title, id: item.id })
       .then((res) => {
         item.loading = false
+        this.getAllTags()
       })
   }
 
@@ -220,6 +233,12 @@ export default class Tags extends Vue {
       sortable: false,
       align: 'center',
       value: 'updateDateTime',
+    },
+    {
+      text: 'عملیات',
+      sortable: false,
+      align: 'center',
+      value: 'actions',
     },
   ]
 }

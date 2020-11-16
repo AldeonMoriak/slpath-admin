@@ -58,7 +58,7 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar app dense>
+    <v-app-bar app dense dark color="#1a1a27" clipped-right>
       <v-app-bar-nav-icon
         v-if="!drawer"
         @click.stop="drawer = !drawer"
@@ -89,7 +89,7 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-btn icon light v-bind="attrs" v-on="on">
                   <v-avatar size="36px" class="float-right"
-                    ><v-icon>mdi-account-circle</v-icon>
+                    ><v-icon color="white">mdi-account-circle</v-icon>
                   </v-avatar>
                 </v-btn>
               </template>
@@ -120,7 +120,7 @@
         dark
         fixed
         bottom
-        right
+        left
         color="primary"
         style="z-index: 99"
         @click="toTop"
@@ -128,6 +128,17 @@
         <v-icon>mdi-chevron-up</v-icon>
       </v-btn>
     </v-fab-transition>
+    <v-footer
+      absolute
+      class="font-weight-medium"
+      app
+      color="grey lighten-4"
+      inset
+    >
+      <v-col class="text-center" cols="12">
+        {{ new Date().getFullYear() }} — <strong>Aldeon</strong>
+      </v-col>
+    </v-footer>
   </v-app>
 </template>
 
