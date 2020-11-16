@@ -1,5 +1,36 @@
 <template>
   <v-card class="pa-2" width="100%" height="100%">
+    <v-dialog v-model="dialog" max-width="500px">
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
+          تگ جدید
+        </v-btn>
+      </template>
+      <v-card>
+        <v-card-title>
+          <span class="headline">ایجاد تگ</span>
+        </v-card-title>
+
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field
+                  v-model="newItem.title"
+                  label="عنوان تگ"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="error" text @click="closeDialog">بستن</v-btn>
+          <v-btn color="primary" text @click="onSaveNewTag">ثبت</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <div>
       <v-data-table
         disable-sort
@@ -55,8 +86,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import toJalaaliConverter from '@/utils/date-convertor'
 
-<<<<<<< HEAD
 interface RAdmin {
   name: string
 }
@@ -70,14 +101,6 @@ interface Tag {
   editor: RAdmin
   loading: boolean
   rowNumber: number
-=======
-interface Tag {
-  title: string
-  admin: string
-  createdDateTime: Date
-  updateDateTime: Date
-  editor: string
->>>>>>> ca4801abf966ac158c3b534e9e31aa430001ed50
 }
 
 interface TagResponse {
@@ -104,13 +127,12 @@ export default class Tags extends Vue {
       .then(() => this.getAllTags())
   }
 
-<<<<<<< HEAD
   async editTag(item: Tag): Promise<void> {
-    console.log(item)
-    const tag = await this.$axios
-      .patch('tags/editTag', { title: item.title, id: item.id })
-      .then((res) => (item.loading = false))
-    console.log(tag)
+    await this.$axios
+      .post('tags/editTag', { title: item.title, id: item.id })
+      .then((res) => {
+        item.loading = false
+      })
   }
 
   cancel() {}
@@ -118,9 +140,21 @@ export default class Tags extends Vue {
   open() {}
 
   close() {}
-=======
-  async editTag(item: Tag): Promise<>
->>>>>>> ca4801abf966ac158c3b534e9e31aa430001ed50
+
+  closeDialog() {
+    this.dialog = false
+    this.newItem.title = ''
+  }
+
+  async onSaveNewTag() {
+    await this.$axios
+      .post('/tags/createTag', { title: this.newItem.title })
+      .then(() => {
+        this.getAllTags()
+        this.dialog = false
+        this.newItem.title = ''
+      })
+  }
 
   async getAllTags(): Promise<void> {
     this.loading = true
@@ -129,6 +163,13 @@ export default class Tags extends Vue {
     els.map((el, i) => {
       el.loading = false
       el.rowNumber = i + 1
+
+      const crDt = el.createdDateTime as unknown
+      el.createdDateTime = toJalaaliConverter(crDt as string) as Date
+      if (el.updateDateTime) {
+        const upDt = el.updateDateTime as unknown
+        el.updateDateTime = toJalaaliConverter(upDt as string) as Date
+      }
     })
     this.rows = els
     this.loading = false
@@ -136,8 +177,13 @@ export default class Tags extends Vue {
 
   items = [5, 10, 25, 50, 100]
   rows: Tag[] = []
+  dialog = false
 
   max25chars = (v: any) => v.length <= 25 || 'تعداد حروف زیاد است!'
+
+  newItem = {
+    title: '',
+  }
 
   headers = [
     {
@@ -158,10 +204,22 @@ export default class Tags extends Vue {
       sortable: false,
     },
     {
+      text: 'ویرایشگر',
+      value: 'editor.name',
+      align: 'center',
+      sortable: false,
+    },
+    {
       text: 'تاریخ ساخت',
       sortable: false,
       align: 'center',
       value: 'createdDateTime',
+    },
+    {
+      text: 'تاریخ ویرایش',
+      sortable: false,
+      align: 'center',
+      value: 'updateDateTime',
     },
   ]
 }

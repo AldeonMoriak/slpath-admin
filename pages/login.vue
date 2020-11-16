@@ -64,6 +64,7 @@ interface SnackbarData {
 }
 @Component({
   layout: 'auth-layout',
+  auth: false,
 })
 export default class Login extends Vue {
   credentials: LoginDTO = {

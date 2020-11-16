@@ -51,6 +51,7 @@ export default {
   },
 
   auth: {
+    resetOnError: true,
     redirect: {
       login: '/login',
       logout: '/login',
