@@ -1,11 +1,8 @@
 <template>
   <v-card class="pa-2" width="100%" height="100%">
     <v-row>
-      <v-col cols="4">
+      <v-col cols="12" class="d-flex justify-space-between">
         <v-card-title>مدیریت تگ ها</v-card-title>
-      </v-col>
-      <v-spacer></v-spacer>
-      <v-col cols="2">
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -142,7 +139,7 @@ export default class Tags extends Vue {
   async editTag(item: Tag): Promise<void> {
     await this.$axios
       .post('tags/editTag', { title: item.title, id: item.id })
-      .then((res) => {
+      .then(() => {
         item.loading = false
         this.getAllTags()
       })

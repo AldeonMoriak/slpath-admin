@@ -1,49 +1,16 @@
 <template>
   <v-card class="pa-2" width="100%" height="100%">
     <v-row>
-      <v-col cols="4">
+      <v-col cols="12" class="d-flex justify-space-between">
         <v-card-title>مدیریت مقاله ها</v-card-title>
-      </v-col>
-      <v-spacer></v-spacer>
-      <v-col cols="2">
-        <v-dialog v-model="dialog" max-width="500px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              color="primary"
-              dark
-              class="mb-2 mt-2"
-              v-bind="attrs"
-              v-on="on"
-            >
-              مقاله جدید
-            </v-btn>
-          </template>
-          <v-card>
-            <v-card-title>
-              <span class="headline">ایجاد مقاله</span>
-            </v-card-title>
-
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="newItem.title"
-                      label="عنوان مقاله"
-                      @keypress.enter="onSaveNewItem"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="error" text @click="closeDialog">بستن</v-btn>
-              <v-btn color="primary" text @click="onSaveNewItem">ثبت</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+        <v-btn
+          color="primary"
+          dark
+          class="mb-2 mt-2"
+          @click="$router.push('/articles/createArticle')"
+        >
+          مقاله جدید
+        </v-btn>
       </v-col>
     </v-row>
     <div>
@@ -65,7 +32,7 @@
             >ویرایش</v-btn
           >
           <v-btn
-            :key="item.id"
+            :key="`${item.id} delete`"
             :loading="item.loading"
             :disabled="item.loading"
             color="error"
@@ -130,7 +97,7 @@ export default class Articles extends Vue {
   async editArticle(item: Article): Promise<void> {
     await this.$axios
       .post('articles/editArticle', { title: item.title, id: item.id })
-      .then((res) => {
+      .then(() => {
         item.loading = false
         this.getAllArticles()
       })
@@ -145,16 +112,6 @@ export default class Articles extends Vue {
   closeDialog() {
     this.dialog = false
     this.newItem.title = ''
-  }
-
-  async onSaveNewArticle() {
-    await this.$axios
-      .post('articles/createArticle', { title: this.newItem.title })
-      .then(() => {
-        this.getAllArticles()
-        this.dialog = false
-        this.newItem.title = ''
-      })
   }
 
   async getAllArticles(): Promise<void> {

@@ -1,5 +1,5 @@
 <template>
-  <v-btn @click="logout">خروج</v-btn>
+  <v-card> </v-card>
 </template>
 
 <script lang="ts">
@@ -9,6 +9,10 @@ import Component from 'vue-class-component'
 @Component
 export default class Index extends Vue {
   text = 'سلام'
+
+  // beforeDestory() {
+  //   this.editor.destroy()
+  // }
 
   async logout(): Promise<void> {
     try {

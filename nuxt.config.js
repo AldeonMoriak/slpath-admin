@@ -21,7 +21,7 @@ export default {
   css: ['~/assets/fonts/SansFont.css', '@mdi/font/css/materialdesignicons.css'],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [],
+  plugins: ['~/plugins/ckeditor.ts', '~/plugins/axios.ts'],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,

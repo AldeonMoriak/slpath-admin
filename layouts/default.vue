@@ -4,7 +4,7 @@
       <v-list-item class="px-2">
         <v-list-item-title
           class="d-flex justify-center align-center white--text"
-          >{{ userFullName }}</v-list-item-title
+          >ادمین گفتار درمانی</v-list-item-title
         >
 
         <v-btn icon @click.stop="drawer = !drawer">
@@ -171,9 +171,7 @@ export default class DefaultLayout extends Vue {
   async logout(): Promise<void> {
     try {
       await this.$auth.logout() /* .then(() => (location.href = '/')) */
-    } catch (error) {
-      console.error(error)
-    }
+    } catch (error) {}
   }
 
   onScroll(e: ScrollEvent) {

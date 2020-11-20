@@ -1,11 +1,8 @@
 <template>
   <v-card class="pa-2" width="100%" height="100%">
     <v-row>
-      <v-col cols="4">
-        <v-card-title>مدیریت دسته بندی ها</v-card-title>
-      </v-col>
-      <v-spacer></v-spacer>
-      <v-col cols="2">
+      <v-col cols="12" class="d-flex justify-space-between">
+        <v-card-title>دسته بندی ها</v-card-title>
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -142,7 +139,7 @@ export default class Categories extends Vue {
   async editCategory(item: Category): Promise<void> {
     await this.$axios
       .post('categories/editCategory', { title: item.title, id: item.id })
-      .then((res) => {
+      .then(() => {
         item.loading = false
         this.getAllCategories()
       })

@@ -67,12 +67,14 @@ h6,
 p,
 .tooltip,
 input,
+span,
 /* div,
 nav, */
 body {
   font-family: WYekan !important;
   /*font-weight: 300;*/
 }
+
 
 .page-enter-active,
 .page-leave-active {

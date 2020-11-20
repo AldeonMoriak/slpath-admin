@@ -13,7 +13,7 @@
       </v-snackbar>
     </div>
     <v-card class="pa-5">
-      <v-card-title>ویرایش مقاله</v-card-title>
+      <v-card-title>ایجاد مقاله</v-card-title>
       <v-row>
         <v-col>
           <v-text-field v-model="article.title" label="عنوان" solo />
@@ -65,14 +65,6 @@
             label="عکس مقاله"
           ></v-file-input>
         </v-col>
-        <v-col cols="12" sm="6" md="6" class="d-flex justify-center">
-          <v-img
-            class="d-flex justify-center"
-            max-height="150"
-            max-width="250"
-            :src="`${$axios.defaults.baseURL}articles/image/${article.thumbnailUrl}`"
-          ></v-img
-        ></v-col>
       </v-row>
       <v-row>
         <v-col class="elevation-5" cols="12">
@@ -106,7 +98,7 @@
           align-self="center"
           class="mt-5 d-flex justify-center align-center"
         >
-          <v-btn color="primary" class="ml-5" @click="onEditArticle">ثبت</v-btn>
+          <v-btn color="primary" class="ml-5" @click="onSaveArticle">ثبت</v-btn>
           <v-btn color="error" @click="$router.go(-1)">بازگشت</v-btn>
         </v-col>
       </v-row>
@@ -150,7 +142,6 @@ interface Article {
   }[]
   content: string
   description: string
-  thumbnailUrl: string
 }
 
 @Component
@@ -160,7 +151,6 @@ export default class CreateArticle extends Vue {
     title: '',
     content: '',
     referenceUrl: '',
-    thumbnailUrl: '',
     description: '',
     category: {
       id: 0,
@@ -204,7 +194,6 @@ export default class CreateArticle extends Vue {
   async created() {
     await this.getCategories()
     await this.getTags()
-    await this.getArticle()
   }
 
   onReady(editor: any) {
@@ -237,32 +226,7 @@ export default class CreateArticle extends Vue {
     })
   }
 
-  async getArticle() {
-    await this.$axios.get(`articles/${this.$route.params.id}`).then((res) => {
-      const {
-        title,
-        description,
-        content,
-        thumbnailUrl,
-        referenceUrl,
-        tags,
-        category,
-      } = res.data
-
-      this.article = {
-        title,
-        description,
-        content,
-        image: null,
-        referenceUrl,
-        thumbnailUrl,
-        tags,
-        category,
-      }
-    })
-  }
-
-  async onEditArticle() {
+  async onSaveArticle() {
     const {
       image,
       content,
@@ -277,7 +241,7 @@ export default class CreateArticle extends Vue {
       if (tag.id !== 0) tagIds.push(tag.id)
     })
     const formData = new FormData()
-    if (image) formData.append('file', image!)
+    formData.append('file', image!)
     formData.append('title', title)
     formData.append('content', content)
     formData.append('description', description)
@@ -286,7 +250,7 @@ export default class CreateArticle extends Vue {
     formData.append('referenceUrl', referenceUrl)
 
     await this.$axios
-      .post('articles/editArticle', formData)
+      .post('articles/createArticle', formData)
       .then((res) => {
         this.snackbarData = {
           text: res.data.message,
