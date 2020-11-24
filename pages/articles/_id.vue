@@ -137,6 +137,7 @@ interface Category {
 }
 
 interface Article {
+  id: number
   image: string | Blob | null
   title: string
   referenceUrl: string
@@ -156,6 +157,7 @@ interface Article {
 @Component
 export default class CreateArticle extends Vue {
   article: Article = {
+    id: NaN,
     image: null,
     title: '',
     content: '',
@@ -240,6 +242,7 @@ export default class CreateArticle extends Vue {
   async getArticle() {
     await this.$axios.get(`articles/${this.$route.params.id}`).then((res) => {
       const {
+        id,
         title,
         description,
         content,
@@ -250,6 +253,7 @@ export default class CreateArticle extends Vue {
       } = res.data
 
       this.article = {
+        id,
         title,
         description,
         content,
@@ -264,6 +268,7 @@ export default class CreateArticle extends Vue {
 
   async onEditArticle() {
     const {
+      id,
       image,
       content,
       referenceUrl,
@@ -278,6 +283,7 @@ export default class CreateArticle extends Vue {
     })
     const formData = new FormData()
     if (image) formData.append('file', image!)
+    formData.append('id', id.toString())
     formData.append('title', title)
     formData.append('content', content)
     formData.append('description', description)
