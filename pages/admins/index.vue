@@ -2,14 +2,14 @@
   <v-card class="pa-2" width="100%" height="100%">
     <v-row>
       <v-col cols="12" class="d-flex justify-space-between">
-        <v-card-title>مدیریت مقاله ها</v-card-title>
+        <v-card-title>مدیریت ادمین ها</v-card-title>
         <v-btn
           color="primary"
           dark
           class="mb-2 mt-2"
-          @click="$router.push('/articles/createArticle')"
+          @click="$router.push('/admins/createAdmin')"
         >
-          مقاله جدید
+          ادمین جدید
         </v-btn>
       </v-col>
     </v-row>
@@ -28,7 +28,7 @@
             :loading="item.loading"
             :disabled="item.loading"
             color="secondary"
-            @click="$router.push(`/articles/${item.id}`)"
+            @click="$router.push(`/admins/${item.id}`)"
             >ویرایش</v-btn
           >
           <v-btn
@@ -36,7 +36,7 @@
             :loading="item.loading"
             :disabled="item.loading"
             color="error"
-            @click="deleteArticle(item)"
+            @click="deleteAdmin(item)"
             >حذف</v-btn
           >
         </template>
@@ -50,33 +50,22 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import toJalaaliConverter from '@/utils/date-convertor'
 
-interface RAdmin {
-  name: string
-}
-
-interface Article {
+export interface Admin {
   id: number
-  title: string
-  admin: RAdmin
-  imageUrl: string
-  thumbnailUrl: string
-  referenceUrl: string
-  description: string
-  content: string
+  name: string
+  username: string
+  email: string
+  profilePictureUrl: string
+  profilePicturethumbnailUrl: string
+  isActive: boolean
   createdDateTime: Date
-  updateDateTime: Date
-  editor: RAdmin
-  loading: boolean
+  createdBy: { name: string }
   rowNumber: number
-}
-
-interface ArticleResponse {
-  tag: Article
-  message: string
+  loading: false
 }
 
 @Component
-export default class Articles extends Vue {
+export default class Admins extends Vue {
   loading = true
 
   options = {
@@ -85,13 +74,13 @@ export default class Articles extends Vue {
   }
 
   created() {
-    this.getAllArticles()
+    this.getAllAdmins()
   }
 
-  async deleteArticle(item: any): Promise<void> {
+  async deleteAdmin(item: Admin): Promise<void> {
     await this.$axios
-      .delete(`articles/deleteArticle/${item.id}`)
-      .then(() => this.getAllArticles())
+      .delete(`admins/deleteAdmin/${item.id}`)
+      .then(() => this.getAllAdmins())
   }
 
   cancel() {}
@@ -105,20 +94,16 @@ export default class Articles extends Vue {
     this.newItem.title = ''
   }
 
-  async getAllArticles(): Promise<void> {
+  async getAllAdmins(): Promise<void> {
     this.loading = true
-    const tags = await this.$axios.get('articles/getAll')
-    const els = tags.data as Article[]
+    const admins = await this.$axios.get('/getAdmins')
+    const els = admins.data as Admin[]
     els.map((el, i) => {
       el.loading = false
       el.rowNumber = i + 1
 
       const crDt = el.createdDateTime as unknown
       el.createdDateTime = toJalaaliConverter(crDt as string) as Date
-      if (el.updateDateTime) {
-        const upDt = el.updateDateTime as unknown
-        el.updateDateTime = toJalaaliConverter(upDt as string) as Date
-      }
     })
 
     this.rows = els
@@ -127,7 +112,7 @@ export default class Articles extends Vue {
   }
 
   items = [5, 10, 25, 50, 100]
-  rows: Article[] = []
+  rows: Admin[] = []
   dialog = false
 
   max25chars = (v: any) => v.length <= 25 || 'تعداد حروف زیاد است!'
@@ -146,31 +131,25 @@ export default class Articles extends Vue {
       text: 'نام',
       align: 'center',
       sortable: false,
-      value: 'title',
+      value: 'name',
     },
     {
-      text: 'سازنده',
-      value: 'admin.name',
+      text: 'نام کاربری',
+      align: 'center',
+      sortable: false,
+      value: 'username',
+    },
+    {
+      text: 'ایجاد کننده',
+      value: 'createdBy.name',
       align: 'center',
       sortable: false,
     },
     {
-      text: 'ویرایشگر',
-      value: 'editor.name',
-      align: 'center',
-      sortable: false,
-    },
-    {
-      text: 'تاریخ ساخت',
+      text: 'تاریخ ایجاد',
       sortable: false,
       align: 'center',
       value: 'createdDateTime',
-    },
-    {
-      text: 'تاریخ ویرایش',
-      sortable: false,
-      align: 'center',
-      value: 'updateDateTime',
     },
     {
       text: 'عملیات',

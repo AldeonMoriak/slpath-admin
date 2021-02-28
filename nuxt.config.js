@@ -66,7 +66,11 @@ export default {
             method: 'post',
             propertyName: 'access_token',
           },
-          user: { url: 'admin', method: 'get', propertyName: 'user' },
+          user: {
+            url: 'admin/getProfile',
+            method: 'get',
+            propertyName: 'user',
+          },
           logout: { url: 'auth/logout', method: 'get' },
         },
         // tokenRequired: true,

@@ -163,6 +163,8 @@ export default class DefaultLayout extends Vue {
   selectedItem = 0
   items = [
     { text: 'داشبورد', icon: 'mdi-view-dashboard', to: '/' },
+    { text: 'پروفایل کاربری', icon: 'mdi-account', to: '/profile' },
+    { text: 'مدیریت ادمین', icon: 'mdi-account-group', to: '/admins' },
     { text: 'مدیریت تگ', icon: 'mdi-tag', to: '/tags' },
     { text: 'مدیریت دسته بندی', icon: 'mdi-shape', to: '/categories' },
     { text: 'مدیریت مقاله', icon: 'mdi-file', to: '/articles' },
