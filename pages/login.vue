@@ -103,7 +103,7 @@ export default class Login extends Vue {
       this.snackbarData = {
         show: true,
         color: 'error',
-        text: err,
+        text: err.message,
       }
     }
   }

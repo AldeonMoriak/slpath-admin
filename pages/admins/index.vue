@@ -79,7 +79,7 @@ export default class Admins extends Vue {
 
   async deleteAdmin(item: Admin): Promise<void> {
     await this.$axios
-      .delete(`admins/deleteAdmin/${item.id}`)
+      .delete(`admin/deleteAdmin/${item.id}`)
       .then(() => this.getAllAdmins())
   }
 
