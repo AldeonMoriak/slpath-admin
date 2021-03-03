@@ -65,6 +65,16 @@
         ></v-col>
       </v-row>
       <v-row>
+        <v-textarea
+          v-model="admin.description"
+          label="درباره خود"
+          clearable
+          solo
+          counter
+          clear-icon="mdi-close-circle"
+        />
+      </v-row>
+      <v-row>
         <v-col
           cols="12"
           align-self="center"
@@ -95,6 +105,7 @@ interface AdminDTO {
   password: string
   image: string | Blob | null
   profilePictureThumbnailUrl: string
+  description: string
 }
 
 const EditProps = Vue.extend({
@@ -123,6 +134,7 @@ export default class CreateAdmin extends EditProps {
     password: '',
     image: null,
     profilePictureThumbnailUrl: '',
+    description: '',
   }
 
   snackbarData: SnackbarData = {
@@ -161,13 +173,14 @@ export default class CreateAdmin extends EditProps {
   }
 
   async onSaveAdmin() {
-    const { image, name, email, username, password } = this.admin
+    const { image, name, email, username, password, description } = this.admin
     const formData = new FormData()
     if (image) formData.append('file', image!)
     formData.append('name', name)
     formData.append('email', email)
     formData.append('username', username)
     formData.append('password', password ?? null)
+    formData.append('description', description)
 
     await this.$axios
       .put<{ message: string }>(this.url, formData)

@@ -27,15 +27,26 @@
             :key="item.id"
             :loading="item.loading"
             :disabled="item.loading"
-            color="secondary"
+            color="orange lighten-3"
+            class="orange--text text--darken-4"
             @click="$router.push(`/articles/${item.id}`)"
             >ویرایش</v-btn
+          >
+          <v-btn
+            :key="`${item.id} comment`"
+            :loading="item.loading"
+            :disabled="item.loading"
+            color="purple lighten-3"
+            class="purple--text text--darken-4"
+            @click="$router.push(`/articles/comments/${item.id}`)"
+            >نظرات</v-btn
           >
           <v-btn
             :key="`${item.id} delete`"
             :loading="item.loading"
             :disabled="item.loading"
-            color="error"
+            color="red lighten-4"
+            class="red--text text--darken-4"
             @click="deleteArticle(item)"
             >حذف</v-btn
           >

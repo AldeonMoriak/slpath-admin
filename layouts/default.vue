@@ -95,7 +95,7 @@
               </template>
 
               <v-list>
-                <v-list-item link nuxt>
+                <v-list-item link nuxt to="/profile">
                   <v-list-item-title>پروفایل</v-list-item-title>
                 </v-list-item>
                 <v-list-item link nuxt>
