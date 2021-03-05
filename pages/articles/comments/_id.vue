@@ -29,7 +29,7 @@
                       v-model="newItem.title"
                       autofocus
                       filled
-                      @keypress.enter="onSaveReply"
+                      @keypress.shift.enter="onSaveReply"
                     ></v-textarea>
                   </v-col>
                 </v-row>
@@ -59,6 +59,7 @@
         :items="rows"
         :options.sync="options"
         class="elevation-8"
+        :item-class="rowClasses"
       >
         <template v-slot:item.creator="{ item }">
           <span style="font-weight: 600">{{ item.creator }}</span>
@@ -66,9 +67,8 @@
         </template>
         <template v-slot:[`item.actions`]="{ item }">
           <v-btn
+            v-if="!item.isAdmin"
             :key="item.id"
-            :loading="item.loading"
-            :disabled="item.loading"
             color="light-blue lighten-3"
             class="light-blue--text text--darken-4 mt-2 mb-1"
             style="min-width: 100px"
@@ -80,14 +80,23 @@
             :loading="item.loading"
             :disabled="item.loading"
             style="min-width: 100px"
-            class="mt-2 mb-1"
+            class="mt-2 mb-2"
             :color="item.isActive ? 'red lighten-4' : 'light-green accent-1'"
-            @click="activeHandler(item.id)"
+            @click="activeHandler(item)"
             >{{ item.isActive ? 'غیرفعال' : 'فعال' }}</v-btn
           >
         </template>
       </v-data-table>
     </div>
+    <v-row>
+      <v-col
+        cols="12"
+        align-self="center"
+        class="mt-5 d-flex justify-center align-center"
+      >
+        <v-btn color="error" @click="$router.go(-1)">بازگشت</v-btn>
+      </v-col>
+    </v-row>
   </v-card>
 </template>
 
@@ -104,6 +113,7 @@ interface ArticleComment {
   content: string
   reply: string[]
   article: { id: number }
+  parent: { id: number }
   loading: boolean
   rowNumber: number
   isActive: boolean
@@ -132,14 +142,23 @@ export default class Articles extends Vue {
     page: 1,
   }
 
+  rowClasses(item: ArticleComment): string {
+    return item.isAdmin ? 'purple lighten-4 mr-2' : ''
+  }
+
   created() {
     this.getAllComments()
   }
 
-  async activeHandler(id: number): Promise<void> {
+  async activeHandler(item: ArticleComment): Promise<void> {
+    const index = this.rows.findIndex((el) => el.id === item.id)
+    this.rows[index].loading = true
     await this.$axios
-      .get(`comments/toggleActive/${id}`)
-      .then(() => this.getAllComments())
+      .get(`comments/toggleActive/${item.id}`)
+      .then(() => {
+        this.getAllComments()
+      })
+      .finally(() => (this.rows[index].loading = true))
   }
 
   cancel() {}
@@ -161,7 +180,7 @@ export default class Articles extends Vue {
   async onSaveReply(): Promise<void> {
     this.loading = true
     await this.$axios
-      .post<{ message: string }>('comments/insertComment', {
+      .post<{ message: string }>('comments/insertCommentForAdmin', {
         name: this.$auth.user.name,
         content: this.newItem.title,
         articleId: this.$route.params.id,
@@ -195,6 +214,15 @@ export default class Articles extends Vue {
       'comments/getAll/' + this.$route.params.id
     )
     const els = comments.data as ArticleComment[]
+
+    els.map((cm, index) => {
+      if (cm.parent) {
+        const cmt = els.splice(index, 1)
+        const idx = els.findIndex((comment) => comment.id === cm.parent.id)
+        els.splice(idx + 1, 0, ...cmt)
+      }
+    })
+
     els.map((el, i) => {
       el.loading = false
       el.rowNumber = i + 1
