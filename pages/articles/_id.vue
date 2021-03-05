@@ -240,30 +240,32 @@ export default class CreateArticle extends Vue {
   }
 
   async getArticle() {
-    await this.$axios.get(`articles/${this.$route.params.id}`).then((res) => {
-      const {
-        id,
-        title,
-        description,
-        content,
-        thumbnailUrl,
-        referenceUrl,
-        tags,
-        category,
-      } = res.data
+    await this.$axios
+      .get(`articles/getPost/${this.$route.params.id}`)
+      .then((res) => {
+        const {
+          id,
+          title,
+          description,
+          content,
+          thumbnailUrl,
+          referenceUrl,
+          tags,
+          category,
+        } = res.data
 
-      this.article = {
-        id,
-        title,
-        description,
-        content,
-        image: null,
-        referenceUrl,
-        thumbnailUrl,
-        tags,
-        category,
-      }
-    })
+        this.article = {
+          id,
+          title,
+          description,
+          content,
+          image: null,
+          referenceUrl,
+          thumbnailUrl,
+          tags,
+          category,
+        }
+      })
   }
 
   async onEditArticle() {
