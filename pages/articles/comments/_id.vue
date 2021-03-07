@@ -62,8 +62,17 @@
         :item-class="rowClasses"
       >
         <template v-slot:item.creator="{ item }">
-          <span style="font-weight: 600">{{ item.creator }}</span>
-          <span style="color: gray; display: block">{{ item.email }}</span>
+          <div class="d-flex flex-row">
+            <div>
+              <v-icon v-if="item.isAdmin" color="purple darken-2">
+                mdi-reply
+              </v-icon>
+            </div>
+            <div>
+              <span style="font-weight: 600">{{ item.creator }}</span>
+              <span style="color: gray; display: block">{{ item.email }}</span>
+            </div>
+          </div>
         </template>
         <template v-slot:[`item.actions`]="{ item }">
           <v-btn
@@ -105,6 +114,19 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import toJalaaliConverter from '@/utils/date-convertor'
 
+interface Reply {
+  id: number
+  creator: string
+  email: string
+  createdDateTime: Date
+  content: string
+  isActive: boolean
+  isAdmin: boolean
+  replies: Reply[]
+  loading: boolean
+  rowNumber: number
+}
+
 interface ArticleComment {
   id: number
   creator: string
@@ -113,7 +135,7 @@ interface ArticleComment {
   content: string
   reply: string[]
   article: { id: number }
-  parent: { id: number }
+  replies: Reply[]
   loading: boolean
   rowNumber: number
   isActive: boolean
@@ -213,15 +235,8 @@ export default class Articles extends Vue {
     const comments = await this.$axios.get<ArticleComment[]>(
       'comments/getAll/' + this.$route.params.id
     )
+    console.log(comments)
     const els = comments.data as ArticleComment[]
-
-    els.map((cm, index) => {
-      if (cm.parent) {
-        const cmt = els.splice(index, 1)
-        const idx = els.findIndex((comment) => comment.id === cm.parent.id)
-        els.splice(idx + 1, 0, ...cmt)
-      }
-    })
 
     els.map((el, i) => {
       el.loading = false
@@ -229,9 +244,21 @@ export default class Articles extends Vue {
 
       const crDt = el.createdDateTime as unknown
       el.createdDateTime = toJalaaliConverter(crDt as string) as Date
+
+      el.replies.map((reply, index) => {
+        reply.rowNumber = i + index + 2 // i + 1 for the starting point, index + 1 for the current loop
+        reply.loading = false
+
+        const crDt = reply.createdDateTime as unknown
+        reply.createdDateTime = toJalaaliConverter(crDt as string) as Date
+      })
+
+      els.push(...(el.replies as any))
     })
 
     this.rows = els
+
+    console.log(els)
 
     this.loading = false
   }
@@ -254,7 +281,7 @@ export default class Articles extends Vue {
     },
     {
       text: 'سازنده',
-      align: 'center',
+      align: 'right',
       sortable: false,
       value: 'creator',
     },

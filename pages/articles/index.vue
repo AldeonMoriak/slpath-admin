@@ -118,7 +118,7 @@ export default class Articles extends Vue {
 
   async getAllArticles(): Promise<void> {
     this.loading = true
-    const tags = await this.$axios.get('articles/getAll')
+    const tags = await this.$axios.get('articles/getArticles')
     const els = tags.data as Article[]
     els.map((el, i) => {
       el.loading = false

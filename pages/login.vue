@@ -35,7 +35,7 @@
         ></v-text-field>
         <v-btn
           :loading="loading"
-          :disabled="loading"
+          :disabled="disabled"
           block
           class="d-flex justify-center"
           large
@@ -79,9 +79,11 @@ export default class Login extends Vue {
   }
 
   loading = false
+  disabled = false
 
   async login(): Promise<void> {
     this.loading = true
+    this.disabled = true
     try {
       await this.$auth
         .loginWith('local', {
@@ -100,6 +102,7 @@ export default class Login extends Vue {
         })
     } catch (err) {
       this.loading = false
+      this.disabled = false
       this.snackbarData = {
         show: true,
         color: 'error',
