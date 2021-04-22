@@ -13,29 +13,16 @@
       </v-snackbar>
     </div>
     <v-card class="pa-5">
-      <v-card-title>ایجاد مقاله</v-card-title>
+      <v-card-title>ویرایش تخصص</v-card-title>
       <v-row>
-        <v-col>
-          <v-text-field v-model="article.title" label="عنوان" solo />
-        </v-col>
-        <v-col>
-          <v-select
-            v-model="article.tags"
-            :items="tags"
-            solo
-            multiple
-            item-text="title"
-            item-value="id"
-            label="تگ ها"
-            return-object
-            single-line
-          ></v-select>
+        <v-col cols="3" sm="3" md="3" lg="3">
+          <v-text-field v-model="interest.title" label="عنوان" solo />
         </v-col>
       </v-row>
       <v-row>
         <v-textarea
-          v-model="article.description"
-          label="خلاصه مقاله"
+          v-model="interest.description"
+          label="خلاصه تخصص"
           clearable
           solo
           counter
@@ -45,39 +32,36 @@
       <v-row>
         <v-col cols="12" sm="6" md="6">
           <v-file-input
-            v-model="article.image"
+            v-model="interest.image"
             :rules="rules"
             accept="image/png, image/jpeg, image/bmp"
             placeholder="یک تصویر انتخاب کنید"
             prepend-icon="mdi-camera"
-            label="عکس مقاله"
+            label="عکس تخصص"
           ></v-file-input>
         </v-col>
+        <v-col cols="12" sm="6" md="6" class="d-flex justify-center">
+          <v-img
+            class="d-flex justify-center"
+            max-height="150"
+            max-width="250"
+            :src="`${$axios.defaults.baseURL}categories/image/${interest.thumbnailUrl}`"
+          ></v-img
+        ></v-col>
       </v-row>
       <v-row>
         <v-col class="elevation-5" cols="12">
-          <v-row><v-col cols="12">محتوای مقاله</v-col></v-row>
+          <v-row><v-col cols="12">محتوای تخصص</v-col></v-row>
           <v-row>
             <v-col cols="12">
               <ckeditor
-                v-model="article.content"
+                v-model="interest.content"
                 :editor="editor"
                 :config="editorConfig"
                 @ready="onReady"
               ></ckeditor>
             </v-col>
           </v-row>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-text-field
-            v-model="article.referenceUrl"
-            type="url"
-            dir="ltr"
-            solo
-            label="آدرس مرجع"
-          />
         </v-col>
       </v-row>
       <v-row>
@@ -111,39 +95,25 @@ interface SnackbarData {
   color: string
   text: string
 }
-
-interface Tag {
+interface Interest {
   id: number
-  title: string
-}
-
-interface Article {
   image: string | Blob | null
   title: string
-  referenceUrl: string
-  tags: {
-    id: number
-    title: string
-  }[]
   content: string
   description: string
+  thumbnailUrl: string
 }
 
 @Component
-export default class CreateArticle extends Vue {
+export default class EditInterest extends Vue {
   disabled = false
-  article: Article = {
+  interest: Interest = {
+    id: 0,
     image: null,
     title: '',
     content: '',
-    referenceUrl: '',
     description: '',
-    tags: [
-      {
-        id: 0,
-        title: '',
-      },
-    ],
+    thumbnailUrl: '',
   }
 
   snackbarData: SnackbarData = {
@@ -162,8 +132,6 @@ export default class CreateArticle extends Vue {
     },
   ]
 
-  tags: Tag[] = []
-
   editor = DecoupledEditor
   editorData = '<p>در این قسمت مقاله خود را بنویسید.</p>'
   editorConfig = {
@@ -175,7 +143,7 @@ export default class CreateArticle extends Vue {
   }
 
   async created() {
-    await this.getTags()
+    await this.getInterest()
   }
 
   destroyed() {
@@ -192,41 +160,35 @@ export default class CreateArticle extends Vue {
       )
   }
 
-  async getTags() {
-    const tags = await this.$axios.get('tags/getAll')
-    const els = tags.data as Tag[]
-    els.map((tag: Tag) => {
-      const id = tag.id as number
-      const title = tag.title as string
-      this.tags.push({ id, title })
-    })
+  async getInterest() {
+    await this.$axios
+      .get(`categories/getcategory/${this.$route.params.id}`)
+      .then((res) => {
+        const { id, title, description, content, thumbnailUrl } = res.data
+
+        this.interest = {
+          id,
+          title,
+          description,
+          content,
+          image: null,
+          thumbnailUrl,
+        }
+      })
   }
 
   timer: any = null
 
   async onSaveArticle() {
-    const {
-      image,
-      content,
-      referenceUrl,
-      description,
-      title,
-      tags,
-    } = this.article
-    const tagIds: number[] = []
-    tags.map((tag) => {
-      if (tag.id !== 0) tagIds.push(tag.id)
-    })
+    const { image, content, description, title } = this.interest
     const formData = new FormData()
-    formData.append('file', image!)
+    if (image) formData.append('file', image!)
     formData.append('title', title)
     formData.append('content', content)
     formData.append('description', description)
-    formData.append('tags', JSON.stringify(tagIds))
-    formData.append('referenceUrl', referenceUrl)
 
     await this.$axios
-      .post('articles/createArticle', formData)
+      .post('categories/editCategory', formData)
       .then((res) => {
         this.snackbarData = {
           text: res.data.message,

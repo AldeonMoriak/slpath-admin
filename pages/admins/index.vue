@@ -94,10 +94,21 @@ export default class Admins extends Vue {
     this.newItem.title = ''
   }
 
+  admins: Admin[] | null = null
+
   async getAllAdmins(): Promise<void> {
     this.loading = true
-    const admins = await this.$axios.get('/getAdmins')
-    const els = admins.data as Admin[]
+    await this.$axios
+      .get<Admin[]>('/getAdmins')
+      .then((res) => {
+        this.loading = false
+        this.admins = res.data
+      })
+      .catch((err) => {
+        this.loading = false
+        throw new Error(err.message)
+      })
+    const els = this.admins as Admin[]
     els.map((el, i) => {
       el.loading = false
       el.rowNumber = i + 1
@@ -107,8 +118,6 @@ export default class Admins extends Vue {
     })
 
     this.rows = els
-
-    this.loading = false
   }
 
   items = [5, 10, 25, 50, 100]

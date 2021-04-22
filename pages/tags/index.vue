@@ -25,8 +25,8 @@
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
-                    autofocus
                       v-model="newItem.title"
+                      autofocus
                       label="عنوان تگ"
                       @keypress.enter="onSaveNewTag"
                     ></v-text-field>
@@ -45,6 +45,17 @@
       </v-col>
     </v-row>
     <div>
+      <!-- <div
+        v-if="isRowEmpty"
+        class="d-flex justify-center align-center mx-auto text-center flex-column"
+      >
+        <img
+          src="/tags.png"
+          class="elevation-2 rounded-circle"
+          style="width: 150px; height: 150px"
+        />
+        <p style="display: block">یک تگ اضافه کنید</p>
+      </div> -->
       <v-data-table
         disable-sort
         :loading="loading"
@@ -53,6 +64,22 @@
         :options.sync="options"
         class="elevation-8"
       >
+        <template v-slot:item.admin.name="{ item }">
+          <div>
+            <span style="font-weight: 600">{{ item.admin.name }}</span>
+            <span style="color: gray; display: block">{{
+              item.editor ? item.editor.name : ''
+            }}</span>
+          </div>
+        </template>
+        <template v-slot:item.createdDateTime="{ item }">
+          <div>
+            <span style="font-weight: 600">{{ item.createdDateTime }}</span>
+            <span style="color: gray; display: block">{{
+              item.updateDateTime ? item.updateDateTime : ''
+            }}</span>
+          </div>
+        </template>
         <template v-slot:[`item.actions`]="{ item }">
           <v-btn
             :key="item.id"
@@ -146,6 +173,12 @@ export default class Tags extends Vue {
       })
   }
 
+  get isRowEmpty() {
+    return (
+      this.rows.length === 0 || this.rows === null || this.rows === undefined
+    )
+  }
+
   cancel() {}
 
   open() {}
@@ -215,22 +248,10 @@ export default class Tags extends Vue {
       sortable: false,
     },
     {
-      text: 'ویرایشگر',
-      value: 'editor.name',
-      align: 'center',
-      sortable: false,
-    },
-    {
       text: 'تاریخ ساخت',
       sortable: false,
       align: 'center',
       value: 'createdDateTime',
-    },
-    {
-      text: 'تاریخ ویرایش',
-      sortable: false,
-      align: 'center',
-      value: 'updateDateTime',
     },
     {
       text: 'عملیات',

@@ -47,7 +47,7 @@
             accept="image/png, image/jpeg, image/bmp"
             placeholder="یک تصویر انتخاب کنید"
             prepend-icon="mdi-camera"
-            label="عکس مقاله"
+            label="عکس کاربر"
           ></v-file-input>
         </v-col>
       </v-row>

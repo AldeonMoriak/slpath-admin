@@ -22,6 +22,22 @@
         :options.sync="options"
         class="elevation-8"
       >
+        <template v-slot:item.admin.name="{ item }">
+          <div>
+            <span style="font-weight: 600">{{ item.admin.name }}</span>
+            <span style="color: gray; display: block">{{
+              item.editor ? item.editor.name : ''
+            }}</span>
+          </div>
+        </template>
+        <template v-slot:item.createdDateTime="{ item }">
+          <div>
+            <span style="font-weight: 600">{{ item.createdDateTime }}</span>
+            <span style="color: gray; display: block">{{
+              item.updateDateTime ? item.updateDateTime : ''
+            }}</span>
+          </div>
+        </template>
         <template v-slot:[`item.actions`]="{ item }">
           <v-btn
             :key="item.id"
@@ -45,10 +61,10 @@
             :key="`${item.id} delete`"
             :loading="item.loading"
             :disabled="item.loading"
-            color="red lighten-4"
-            class="red--text text--darken-4"
+            :color="deleteColor(item.isActive)"
+            :class="deleteClass(item.isActive)"
             @click="deleteArticle(item)"
-            >حذف</v-btn
+            >{{ item.isActive ? 'غیرفعال' : 'فعال' }}</v-btn
           >
         </template>
       </v-data-table>
@@ -79,6 +95,7 @@ interface Article {
   editor: RAdmin
   loading: boolean
   rowNumber: number
+  isActive: boolean
 }
 
 interface ArticleResponse {
@@ -93,6 +110,14 @@ export default class Articles extends Vue {
   options = {
     itemsPerPage: 10,
     page: 1,
+  }
+
+  deleteClass(isActive: boolean) {
+    return isActive ? 'red--text text--darken-4' : 'green--text text--darken-4'
+  }
+
+  deleteColor(isActive: boolean) {
+    return isActive ? 'red lighten-4' : 'green lighten-4'
   }
 
   created() {
@@ -166,22 +191,10 @@ export default class Articles extends Vue {
       sortable: false,
     },
     {
-      text: 'ویرایشگر',
-      value: 'editor.name',
-      align: 'center',
-      sortable: false,
-    },
-    {
       text: 'تاریخ ساخت',
       sortable: false,
       align: 'center',
       value: 'createdDateTime',
-    },
-    {
-      text: 'تاریخ ویرایش',
-      sortable: false,
-      align: 'center',
-      value: 'updateDateTime',
     },
     {
       text: 'عملیات',

@@ -71,6 +71,9 @@
             <div>
               <span style="font-weight: 600">{{ item.creator }}</span>
               <span style="color: gray; display: block">{{ item.email }}</span>
+              <span style="color: gray; display: block">{{
+                item.createdDateTime
+              }}</span>
             </div>
           </div>
         </template>
@@ -216,6 +219,7 @@ export default class Articles extends Vue {
           text: res.data.message,
         }
         this.getAllComments()
+        this.closeDialog()
       })
       .catch((err) => {
         this.snackbarData = {
@@ -226,7 +230,6 @@ export default class Articles extends Vue {
       })
       .finally(() => {
         this.loading = false
-        this.closeDialog()
       })
   }
 
@@ -291,12 +294,6 @@ export default class Articles extends Vue {
     //   align: 'center',
     //   sortable: false,
     // },
-    {
-      text: 'تاریخ ساخت',
-      sortable: false,
-      align: 'center',
-      value: 'createdDateTime',
-    },
     {
       text: 'محتوا',
       sortable: false,

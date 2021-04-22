@@ -1,12 +1,21 @@
 <template>
   <v-app dark>
-    <h1 v-if="error.statusCode === 404">
-      {{ pageNotFound }}
-    </h1>
-    <h1 v-else>
-      {{ otherError }}
-    </h1>
-    <NuxtLink to="/"> Home page </NuxtLink>
+    <v-card
+      max-width="600"
+      min-width="400"
+      min-height="100"
+      class="mx-auto my-12"
+    >
+      <div class="mx-2 my-12">
+        <h1 v-if="error.statusCode === 404">
+          {{ pageNotFound }}
+        </h1>
+        <h1 v-else>
+          {{ otherError }}
+        </h1>
+        <a href="/">صفحه اصلی</a>
+      </div>
+    </v-card>
   </v-app>
 </template>
 
@@ -21,8 +30,8 @@ export default {
   },
   data() {
     return {
-      pageNotFound: '404 Not Found',
-      otherError: 'An error occurred',
+      pageNotFound: 'صفحه مورد نظر یافت نشد',
+      otherError: 'خطایی رخ داده است',
     }
   },
   head() {

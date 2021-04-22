@@ -20,21 +20,10 @@
         </v-col>
         <v-col>
           <v-select
-            v-model="article.category"
-            solo
-            :items="categories"
-            item-text="title"
-            item-value="id"
-            label="دسته بندی"
-            return-object
-            single-line
-          ></v-select>
-        </v-col>
-        <v-col>
-          <v-select
             v-model="article.tags"
             :items="tags"
             solo
+            :rules="categoryRules"
             multiple
             item-text="title"
             item-value="id"
@@ -106,7 +95,13 @@
           align-self="center"
           class="mt-5 d-flex justify-center align-center"
         >
-          <v-btn color="primary" class="ml-5" @click="onEditArticle">ثبت</v-btn>
+          <v-btn
+            color="primary"
+            class="ml-5"
+            :disabled="disabled"
+            @click="onEditArticle"
+            >ثبت</v-btn
+          >
           <v-btn color="error" @click="$router.go(-1)">بازگشت</v-btn>
         </v-col>
       </v-row>
@@ -131,20 +126,11 @@ interface Tag {
   title: string
 }
 
-interface Category {
-  id: number
-  title: string
-}
-
 interface Article {
   id: number
   image: string | Blob | null
   title: string
   referenceUrl: string
-  category: {
-    id: number
-    title: string
-  }
   tags: {
     id: number
     title: string
@@ -156,6 +142,7 @@ interface Article {
 
 @Component
 export default class CreateArticle extends Vue {
+  disabled = false
   article: Article = {
     id: NaN,
     image: null,
@@ -164,10 +151,6 @@ export default class CreateArticle extends Vue {
     referenceUrl: '',
     thumbnailUrl: '',
     description: '',
-    category: {
-      id: 0,
-      title: '',
-    },
     tags: [
       {
         id: 0,
@@ -182,6 +165,8 @@ export default class CreateArticle extends Vue {
     text: '',
   }
 
+  categoryRules = [(v: any) => !!v || 'این فیلد اجباری است']
+
   rules = [
     function (value: File) {
       return (
@@ -192,8 +177,6 @@ export default class CreateArticle extends Vue {
     },
   ]
 
-  categories: Category[] = []
-
   tags: Tag[] = []
 
   editor = DecoupledEditor
@@ -201,12 +184,18 @@ export default class CreateArticle extends Vue {
   editorConfig = {
     // The configuration of the editor.
     language: 'fa',
+    link: {
+      addTargetToExternalLinks: true,
+    },
   }
 
   async created() {
-    await this.getCategories()
     await this.getTags()
     await this.getArticle()
+  }
+
+  destroyed() {
+    clearTimeout(this.timer)
   }
 
   onReady(editor: any) {
@@ -229,16 +218,6 @@ export default class CreateArticle extends Vue {
     })
   }
 
-  async getCategories() {
-    const categories = await this.$axios.get('categories/getAll')
-    const els = categories.data as Category[]
-    els.map((category: Category) => {
-      const id = category.id as number
-      const title = category.title as string
-      this.categories.push({ id, title })
-    })
-  }
-
   async getArticle() {
     await this.$axios
       .get(`articles/getPost/${this.$route.params.id}`)
@@ -251,7 +230,6 @@ export default class CreateArticle extends Vue {
           thumbnailUrl,
           referenceUrl,
           tags,
-          category,
         } = res.data
 
         this.article = {
@@ -263,10 +241,11 @@ export default class CreateArticle extends Vue {
           referenceUrl,
           thumbnailUrl,
           tags,
-          category,
         }
       })
   }
+
+  timer: any = null
 
   async onEditArticle() {
     const {
@@ -276,7 +255,6 @@ export default class CreateArticle extends Vue {
       referenceUrl,
       description,
       title,
-      category,
       tags,
     } = this.article
     const tagIds: number[] = []
@@ -289,7 +267,6 @@ export default class CreateArticle extends Vue {
     formData.append('title', title)
     formData.append('content', content)
     formData.append('description', description)
-    formData.append('categoryId', JSON.stringify(category.id))
     formData.append('tags', JSON.stringify(tagIds))
     formData.append('referenceUrl', referenceUrl)
 
@@ -301,6 +278,10 @@ export default class CreateArticle extends Vue {
           color: 'success',
           show: true,
         }
+        this.disabled = true
+        this.timer = setTimeout(() => {
+          this.$router.go(-1)
+        }, 4000)
       })
       .catch((err) => {
         this.snackbarData = {

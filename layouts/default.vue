@@ -95,10 +95,10 @@
               </template>
 
               <v-list>
-                <v-list-item link nuxt to="/profile">
+                <v-list-item to="/profile">
                   <v-list-item-title>پروفایل</v-list-item-title>
                 </v-list-item>
-                <v-list-item link nuxt>
+                <v-list-item link>
                   <v-list-item-title @click="logout">خروج </v-list-item-title>
                 </v-list-item>
               </v-list>
@@ -166,7 +166,7 @@ export default class DefaultLayout extends Vue {
     { text: 'پروفایل کاربری', icon: 'mdi-account', to: '/profile' },
     { text: 'مدیریت ادمین', icon: 'mdi-account-group', to: '/admins' },
     { text: 'مدیریت تگ', icon: 'mdi-tag', to: '/tags' },
-    { text: 'مدیریت دسته بندی', icon: 'mdi-shape', to: '/categories' },
+    { text: 'مدیریت تخصخص', icon: 'mdi-shape', to: '/categories' },
     { text: 'مدیریت مقاله', icon: 'mdi-file', to: '/articles' },
   ]
 
