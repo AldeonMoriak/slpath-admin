@@ -164,11 +164,20 @@ export default class DefaultLayout extends Vue {
   items = [
     { text: 'داشبورد', icon: 'mdi-view-dashboard', to: '/' },
     { text: 'پروفایل کاربری', icon: 'mdi-account', to: '/profile' },
-    { text: 'مدیریت ادمین', icon: 'mdi-account-group', to: '/admins' },
     { text: 'مدیریت تگ', icon: 'mdi-tag', to: '/tags' },
     { text: 'مدیریت تخصخص', icon: 'mdi-shape', to: '/categories' },
     { text: 'مدیریت مقاله', icon: 'mdi-file', to: '/articles' },
   ]
+
+  mounted() {
+    if (this.$auth.user.isSuperAdmin) {
+      this.items.splice(2, 0, {
+        text: 'مدیریت ادمین',
+        icon: 'mdi-account-group',
+        to: '/admins',
+      })
+    }
+  }
 
   async logout(): Promise<void> {
     try {
