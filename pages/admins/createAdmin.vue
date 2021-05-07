@@ -57,7 +57,13 @@
           align-self="center"
           class="mt-5 d-flex justify-center align-center"
         >
-          <v-btn color="primary" class="ml-5" @click="onSaveAdmin">ثبت</v-btn>
+          <v-btn
+            color="primary"
+            class="ml-5"
+            :disabled="disabled"
+            @click="onSaveAdmin"
+            >ثبت</v-btn
+          >
           <v-btn color="error" @click="$router.go(-1)">بازگشت</v-btn>
         </v-col>
       </v-row>
@@ -97,6 +103,8 @@ interface AdminDTO {
 
 @Component
 export default class CreateAdmin extends Vue {
+  disabled = false
+
   admin: AdminDTO = {
     name: '',
     email: '',
@@ -135,6 +143,12 @@ export default class CreateAdmin extends Vue {
   async created() {
     await this.getCategories()
     await this.getTags()
+  }
+
+  timer: any = null
+
+  destroyed() {
+    clearTimeout(this.timer)
   }
 
   onReady(editor: any) {
@@ -184,6 +198,10 @@ export default class CreateAdmin extends Vue {
           color: 'success',
           show: true,
         }
+        this.disabled = true
+        this.timer = setTimeout(() => {
+          this.$router.go(-1)
+        }, 4000)
       })
       .catch((err) => {
         console.log(err.message)
