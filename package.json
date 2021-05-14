@@ -17,6 +17,7 @@
     "@ckeditor/ckeditor5-dev-webpack-plugin": "^23.6.1",
     "@ckeditor/ckeditor5-theme-lark": "^23.1.0",
     "@ckeditor/ckeditor5-vue": "^1.0.3",
+    "@lottiefiles/lottie-player": "^1.0.3",
     "@nuxtjs/auth": "^4.9.1",
     "@nuxtjs/axios": "^5.12.2",
     "core-js": "^3.6.5",
@@ -25,7 +26,8 @@
     "nuxt": "^2.15.2",
     "postcss-loader": "3",
     "raw-loader": "0.5.1",
-    "vue-class-component": "^7.2.6"
+    "vue-class-component": "^7.2.6",
+    "vuetify": "^2.4.11"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.12.1",

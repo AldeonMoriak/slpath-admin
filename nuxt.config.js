@@ -21,7 +21,11 @@ export default {
   css: ['~/assets/fonts/SansFont.css', '@mdi/font/css/materialdesignicons.css'],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: ['~/plugins/ckeditor.ts', '~/plugins/axios.ts'],
+  plugins: [
+    '~/plugins/ckeditor.ts',
+    '~/plugins/axios.ts',
+    { src: '~/plugins/lottie-player.ts', mode: 'client' },
+  ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,

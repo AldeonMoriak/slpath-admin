@@ -978,6 +978,17 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@lottiefiles/lottie-player@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@lottiefiles/lottie-player/-/lottie-player-1.0.3.tgz#4d387d2cd1f9787dad8a74f1879e266dde66bc57"
+  integrity sha512-B+6FMIsTo2OO+Fqp/UlyIXK/88/73l3wFo3L12xEBA7EmlEA/DPct+oQzZI3SuYzm9wy6qk+ozMs6H2KCvqh6w==
+  dependencies:
+    "@types/pako" "^1.0.1"
+    lit-element "^2.3.1"
+    lottie-web "^5.7.8"
+    pako "^1.0.11"
+    resize-observer-polyfill "^1.5.1"
+
 "@mdi/font@^5.8.55":
   version "5.9.55"
   resolved "https://registry.yarnpkg.com/@mdi/font/-/font-5.9.55.tgz#41acd50b88073ded7095fc3029d8712b6e12f38e"
@@ -1678,6 +1689,11 @@
   integrity sha512-kOeZHQyoeau/6Obelj5/iow7uo5rH2KpbdWPEGCqbC4bxkiteg794tU4LqKFlQKdM5QGCp5Hbapl+zDdQzBNkQ==
   dependencies:
     "@types/webpack" "*"
+
+"@types/pako@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@types/pako/-/pako-1.0.1.tgz#33b237f3c9aff44d0f82fe63acffa4a365ef4a61"
+  integrity sha512-GdZbRSJ3Cv5fiwT6I0SQ3ckeN2PWNqxd26W9Z2fCK1tGrrasGy4puvNFtnddqH9UJFMQYXxEuuB7B8UK+LLwSg==
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"
@@ -5721,6 +5737,18 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
+lit-element@^2.3.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/lit-element/-/lit-element-2.5.1.tgz#3fa74b121a6cd22902409ae3859b7847d01aa6b6"
+  integrity sha512-ogu7PiJTA33bEK0xGu1dmaX5vhcRjBXCFexPja0e7P7jqLhTpNKYRPmE+GmiCaRVAbiQKGkUgkh/i6+bh++dPQ==
+  dependencies:
+    lit-html "^1.1.1"
+
+lit-html@^1.1.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/lit-html/-/lit-html-1.4.1.tgz#0c6f3ee4ad4eb610a49831787f0478ad8e9ae5e0"
+  integrity sha512-B9btcSgPYb1q4oSOb/PrOT6Z/H+r6xuNzfH4lFli/AWhYwdtrgQkQWBbIc6mdnf6E2IL3gDXdkkqNktpU0OZQA==
+
 load-json-file@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/load-json-file/-/load-json-file-2.0.0.tgz#7947e42149af80d696cbf797bcaabcfe1fe29ca8"
@@ -5841,6 +5869,11 @@ lodash@^4.15.0, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
+
+lottie-web@^5.7.8:
+  version "5.7.8"
+  resolved "https://registry.yarnpkg.com/lottie-web/-/lottie-web-5.7.8.tgz#c7a2e42983bcb42093590a03ccdde8741d3f960e"
+  integrity sha512-VxKCZk33GwZac6mVHvT3grUFR/zrMsW85M7vxQPrgpJOP2IhcnjMbuD0h7muBkXgw84K9KmGulmcyzvhpzSMAg==
 
 lower-case@^1.1.1:
   version "1.1.4"
@@ -6636,7 +6669,7 @@ p-try@^2.0.0:
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.2.0.tgz#cb2868540e313d61de58fafbe35ce9004d5540e6"
   integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
 
-pako@~1.0.5:
+pako@^1.0.11, pako@~1.0.5:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.11.tgz#6c9599d340d54dfd3946380252a35705a6b992bf"
   integrity sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==
@@ -8004,6 +8037,11 @@ reserved-words@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/reserved-words/-/reserved-words-0.1.2.tgz#00a0940f98cd501aeaaac316411d9adc52b31ab1"
   integrity sha1-AKCUD5jNUBrqqsMWQR2a3FKzGrE=
+
+resize-observer-polyfill@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
+  integrity sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==
 
 resolve-from@^3.0.0:
   version "3.0.0"
@@ -9399,6 +9437,11 @@ vuetify-loader@^1.6.0:
     decache "^4.6.0"
     file-loader "^6.2.0"
     loader-utils "^2.0.0"
+
+vuetify@^2.4.11:
+  version "2.4.11"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-2.4.11.tgz#3aba19a32cd89c5dce523260f589cf95d90e2dce"
+  integrity sha512-xFNwr95tFRfbyGNg5DBuUkWaKazMBr+ptzoSSL4PGrI0qItY5Vuusxh+ETPtjUXxwz76v5zVtGvF5rWvGQjy7A==
 
 vuetify@^2.4.2:
   version "2.4.5"

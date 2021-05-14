@@ -165,7 +165,7 @@ export default class DefaultLayout extends Vue {
     { text: 'داشبورد', icon: 'mdi-view-dashboard', to: '/' },
     { text: 'پروفایل کاربری', icon: 'mdi-account', to: '/profile' },
     { text: 'مدیریت تگ', icon: 'mdi-tag', to: '/tags' },
-    { text: 'مدیریت تخصخص', icon: 'mdi-shape', to: '/categories' },
+    { text: 'مدیریت تخصص', icon: 'mdi-shape', to: '/categories' },
     { text: 'مدیریت مقاله', icon: 'mdi-file', to: '/articles' },
   ]
 

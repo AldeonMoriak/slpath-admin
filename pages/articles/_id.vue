@@ -112,8 +112,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document'
-import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/fa'
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+// import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/fa'
+import '@ckeditor/ckeditor5-build-classic/build/translations/fa'
 
 interface SnackbarData {
   show: boolean
@@ -179,13 +180,17 @@ export default class CreateArticle extends Vue {
 
   tags: Tag[] = []
 
-  editor = DecoupledEditor
+  editor = ClassicEditor
   editorData = '<p>در این قسمت مقاله خود را بنویسید.</p>'
   editorConfig = {
     // The configuration of the editor.
     language: 'fa',
     link: {
       addTargetToExternalLinks: true,
+    },
+    toolbar: {
+      viewportTopOffset: 70,
+      shouldNotGroupWhenFull: true,
     },
   }
 
@@ -293,3 +298,9 @@ export default class CreateArticle extends Vue {
   }
 }
 </script>
+
+<style scoped>
+.ck.ck-editor__editable_inline {
+  padding-right: 30px !important;
+}
+</style>
