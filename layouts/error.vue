@@ -6,14 +6,23 @@
       min-height="100"
       class="mx-auto my-12"
     >
-      <div class="mx-2 my-12">
-        <h1 v-if="error.statusCode === 404">
+      <div class="my-12 mx-auto">
+        <h1 v-if="error.statusCode === 404" class="text-center">
           {{ pageNotFound }}
         </h1>
         <h1 v-else>
           {{ otherError }}
         </h1>
-        <a href="/">صفحه اصلی</a>
+        <a href="/"><p class="text-center">صفحه اصلی</p></a>
+        <div v-if="error.statusCode === 404">
+          <lottie-player
+            class="mx-auto"
+            autoplay
+            loop
+            src="/animations/not-found.json"
+            speed="1"
+          ></lottie-player>
+        </div>
       </div>
     </v-card>
   </v-app>
@@ -21,7 +30,7 @@
 
 <script>
 export default {
-  layout: 'empty',
+  layout: 'error',
   props: {
     error: {
       type: Object,

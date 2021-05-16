@@ -183,6 +183,7 @@ export default class EditInterest extends Vue {
     const { image, content, description, title } = this.interest
     const formData = new FormData()
     if (image) formData.append('file', image!)
+    formData.append('id', this.$route.params.id)
     formData.append('title', title)
     formData.append('content', content)
     formData.append('description', description)
@@ -210,3 +211,10 @@ export default class EditInterest extends Vue {
   }
 }
 </script>
+
+<style>
+.ck.ck-reset_all {
+  position: sticky;
+  top: 55px;
+}
+</style>

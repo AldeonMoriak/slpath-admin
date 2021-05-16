@@ -24,7 +24,7 @@ export default {
   plugins: [
     '~/plugins/ckeditor.ts',
     '~/plugins/axios.ts',
-    { src: '~/plugins/lottie-player.ts', mode: 'client' },
+    { src: '~/plugins/lottie-player.js', mode: 'client' },
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
