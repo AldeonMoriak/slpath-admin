@@ -79,7 +79,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document'
+// import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document'
+import DecoupledEditor from '@ckeditor/ckeditor5-build-classic'
 import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/fa'
 
 interface SnackbarData {
@@ -177,3 +178,10 @@ export default class CreateInterest extends Vue {
   }
 }
 </script>
+
+<style>
+.ck.ck-toolbar {
+  position: sticky;
+  top: 55px;
+}
+</style>

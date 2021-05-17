@@ -53,12 +53,12 @@
             >ویرایش</v-btn
           >
           <v-btn
-            :key="'delete' + item.id"
+            :key="'toggle' + item.id"
             :loading="item.loading"
             :disabled="item.loading"
-            color="error"
-            @click="deleteCategory(item)"
-            >حذف</v-btn
+            :color="item.isActive ? 'error' : 'success'"
+            @click="toggleCategoryActiveness(item)"
+            >{{ item.isActive ? 'غیرفعال' : 'فعال' }}</v-btn
           >
         </template>
       </v-data-table>
@@ -113,9 +113,9 @@ export default class Categories extends Vue {
     this.getAllCategories()
   }
 
-  async deleteCategory(item: any): Promise<void> {
+  async toggleCategoryActiveness(item: any): Promise<void> {
     await this.$axios
-      .delete(`categories/deleteCategory/${item.id}`)
+      .put(`categories/toggleCategoryActiveness/${item.id}`)
       .then(() => this.getAllCategories())
       .catch((err) => {
         this.snackbarData = {
@@ -139,7 +139,7 @@ export default class Categories extends Vue {
 
   async getAllCategories(): Promise<void> {
     this.loading = true
-    const tags = await this.$axios.get('categories/getAll')
+    const tags = await this.$axios.get('categories/getAllForAdmin')
     const els = tags.data as Category[]
     els.map((el, i) => {
       el.loading = false

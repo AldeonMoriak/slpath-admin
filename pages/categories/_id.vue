@@ -87,7 +87,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document'
+// import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document'
+import DecoupledEditor from '@ckeditor/ckeditor5-build-classic'
 import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/fa'
 
 interface SnackbarData {
@@ -213,7 +214,7 @@ export default class EditInterest extends Vue {
 </script>
 
 <style>
-.ck.ck-reset_all {
+.ck.ck-toolbar {
   position: sticky;
   top: 55px;
 }

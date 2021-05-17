@@ -112,7 +112,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document'
+// import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document'
+import DecoupledEditor from '@ckeditor/ckeditor5-build-classic'
 import '@ckeditor/ckeditor5-build-decoupled-document/build/translations/fa'
 
 interface SnackbarData {
@@ -251,15 +252,8 @@ export default class CreateArticle extends Vue {
   timer: any = null
 
   async onEditArticle() {
-    const {
-      id,
-      image,
-      content,
-      referenceUrl,
-      description,
-      title,
-      tags,
-    } = this.article
+    const { id, image, content, referenceUrl, description, title, tags } =
+      this.article
     const tagIds: number[] = []
     tags.map((tag) => {
       if (tag.id !== 0) tagIds.push(tag.id)
@@ -298,7 +292,7 @@ export default class CreateArticle extends Vue {
 </script>
 
 <style>
-.ck.ck-reset_all {
+.ck.ck-toolbar {
   position: sticky;
   top: 55px;
 }

@@ -235,12 +235,24 @@ export default class Articles extends Vue {
 
   async getAllComments(): Promise<void> {
     this.loading = true
-    const comments = await this.$axios.get<ArticleComment[]>(
-      'comments/getAll/' + this.$route.params.id
-    )
-    console.log(comments)
-    const els = comments.data as ArticleComment[]
+    let els: ArticleComment[] = []
+    const comments = await this.$axios
+      .get<ArticleComment[]>('comments/getAll/' + this.$route.params.id)
+      .then((res) => {
+        els = res.data as ArticleComment[]
+      })
+      .catch((err) => {
+        this.loading = false
+        console.log(comments)
+        this.snackbarData = {
+          text: err.message ?? err,
+          color: 'error',
+          show: true,
+        }
+      })
+    // const els = comments!.data as ArticleComment[]
 
+    const elements: ArticleComment[] = []
     els.map((el, i) => {
       el.loading = false
       el.rowNumber = i + 1
@@ -248,20 +260,23 @@ export default class Articles extends Vue {
       const crDt = el.createdDateTime as unknown
       el.createdDateTime = toJalaaliConverter(crDt as string) as Date
 
-      el.replies.map((reply, index) => {
-        reply.rowNumber = i + index + 2 // i + 1 for the starting point, index + 1 for the current loop
-        reply.loading = false
+      if (el.replies) {
+        el.replies.map((reply) => {
+          reply.loading = false
 
-        const crDt = reply.createdDateTime as unknown
-        reply.createdDateTime = toJalaaliConverter(crDt as string) as Date
-      })
+          const crDt = reply.createdDateTime as unknown
+          reply.createdDateTime = toJalaaliConverter(crDt as string) as Date
+        })
 
-      els.push(...(el.replies as any))
+        elements.push(el)
+        elements.push(...(el.replies as ArticleComment[]))
+      }
+      // els.push(...(el.replies as any))
     })
 
-    this.rows = els
+    elements.map((el, i) => (el.rowNumber = i + 1))
 
-    console.log(els)
+    this.rows = elements
 
     this.loading = false
   }

@@ -11,6 +11,7 @@
     "lint": "yarn lint:js"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^27.1.0",
     "@ckeditor/ckeditor5-build-decoupled-document": "^27.1.0",
     "@ckeditor/ckeditor5-vue2": "^1.0.5",
     "@lottiefiles/lottie-player": "^1.0.3",
