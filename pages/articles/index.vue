@@ -41,29 +41,25 @@
         <template v-slot:[`item.actions`]="{ item }">
           <v-btn
             :key="item.id"
-            :loading="item.loading"
-            :disabled="item.loading"
             color="orange lighten-3"
             class="orange--text text--darken-4"
             @click="$router.push(`/articles/${item.id}`)"
             >ویرایش</v-btn
           >
           <v-btn
-            :key="`${item.id} comment`"
-            :loading="item.loading"
-            :disabled="item.loading"
+            :key="`${item.id}-comment`"
             color="purple lighten-3"
             class="purple--text text--darken-4"
             @click="$router.push(`/articles/comments/${item.id}`)"
             >نظرات</v-btn
           >
           <v-btn
-            :key="`${item.id} delete`"
+            :key="`${item.id}-toggle`"
             :loading="item.loading"
             :disabled="item.loading"
-            :color="deleteColor(item.isActive)"
-            :class="deleteClass(item.isActive)"
-            @click="deleteArticle(item)"
+            :color="toggleColor(item.isActive)"
+            :class="toggleClass(item.isActive)"
+            @click="toggleArticleActivation(item)"
             >{{ item.isActive ? 'غیرفعال' : 'فعال' }}</v-btn
           >
         </template>
@@ -112,11 +108,11 @@ export default class Articles extends Vue {
     page: 1,
   }
 
-  deleteClass(isActive: boolean) {
+  toggleClass(isActive: boolean) {
     return isActive ? 'red--text text--darken-4' : 'green--text text--darken-4'
   }
 
-  deleteColor(isActive: boolean) {
+  toggleColor(isActive: boolean) {
     return isActive ? 'red lighten-4' : 'green lighten-4'
   }
 
@@ -124,10 +120,22 @@ export default class Articles extends Vue {
     this.getAllArticles()
   }
 
-  async deleteArticle(item: any): Promise<void> {
+  async toggleArticleActivation(item: Article): Promise<void> {
+    const articleIndex = this.rows.findIndex(
+      (article) => article.id === item.id
+    )
+    this.rows[articleIndex].loading = true
     await this.$axios
-      .delete(`articles/deleteArticle/${item.id}`)
-      .then(() => this.getAllArticles())
+      .put(`articles/toggleArticleActivation/${item.id}`)
+      .then(() => {
+        this.rows[articleIndex].loading = false
+        this.rows[articleIndex].isActive = !this.rows[articleIndex].isActive
+        // this.getAllArticles()
+      })
+      .catch((err) => {
+        console.log(err)
+        this.rows[articleIndex].loading = false
+      })
   }
 
   cancel() {}

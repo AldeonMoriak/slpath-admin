@@ -88,7 +88,7 @@
             >پاسخ</v-btn
           >
           <v-btn
-            :key="`${item.id} delete`"
+            :key="`${item.id}-toggle`"
             :loading="item.loading"
             :disabled="item.loading"
             style="min-width: 100px"
@@ -181,9 +181,10 @@ export default class Articles extends Vue {
     await this.$axios
       .get(`comments/toggleActive/${item.id}`)
       .then(() => {
-        this.getAllComments()
+        this.rows[index].isActive = !this.rows[index].isActive
+        // this.getAllComments()
       })
-      .finally(() => (this.rows[index].loading = true))
+      .finally(() => (this.rows[index].loading = false))
   }
 
   cancel() {}

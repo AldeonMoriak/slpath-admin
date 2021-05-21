@@ -22,22 +22,20 @@
         :options.sync="options"
         class="elevation-8"
       >
-        <template v-slot:[`item.actions`]="{ item }">
+        <template v-slot:item.actions="{ item }">
           <v-btn
-            :key="item.id"
-            :loading="item.loading"
-            :disabled="item.loading"
+            :key="item.id + 'edit'"
             color="secondary"
             @click="$router.push(`/admins/${item.id}`)"
             >ویرایش</v-btn
           >
           <v-btn
-            :key="`${item.id} delete`"
+            :key="'toggle' + item.id"
             :loading="item.loading"
             :disabled="item.loading"
-            color="error"
-            @click="deleteAdmin(item)"
-            >حذف</v-btn
+            :color="item.isActive ? 'success' : 'error'"
+            @click="toggle(item)"
+            >{{ item.isActive ? 'غیرفعال' : 'فعال' }}</v-btn
           >
         </template>
       </v-data-table>
@@ -61,12 +59,16 @@ export interface Admin {
   createdDateTime: Date
   createdBy: { name: string }
   rowNumber: number
-  loading: false
+  loading: boolean
 }
 
 @Component
 export default class Admins extends Vue {
   loading = true
+
+  items = [5, 10, 25, 50, 100]
+  rows: Admin[] = []
+  dialog = false
 
   options = {
     itemsPerPage: 10,
@@ -77,10 +79,19 @@ export default class Admins extends Vue {
     this.getAllAdmins()
   }
 
-  async deleteAdmin(item: Admin): Promise<void> {
+  async toggle(item: Admin): Promise<void> {
+    const index = this.rows.findIndex((admin) => admin.id === item.id)
+    this.rows[index].loading = true
     await this.$axios
-      .delete(`admin/deleteAdmin/${item.id}`)
-      .then(() => this.getAllAdmins())
+      .put(`admin/toggleAdminActivation/${item.id}`)
+      .then(() => {
+        this.rows[index].loading = false
+        this.rows[index].isActive = !this.rows[index].isActive
+        // this.getAllAdmins()
+      })
+      .catch(() => {
+        this.rows[index].loading = false
+      })
   }
 
   cancel() {}
@@ -94,7 +105,7 @@ export default class Admins extends Vue {
     this.newItem.title = ''
   }
 
-  admins: Admin[] | null = null
+  admins: Admin[] = []
 
   async getAllAdmins(): Promise<void> {
     this.loading = true
@@ -108,7 +119,7 @@ export default class Admins extends Vue {
         this.loading = false
         throw new Error(err.message)
       })
-    const els = this.admins as Admin[]
+    const els = this.admins
     els.map((el, i) => {
       el.loading = false
       el.rowNumber = i + 1
@@ -119,10 +130,6 @@ export default class Admins extends Vue {
 
     this.rows = els
   }
-
-  items = [5, 10, 25, 50, 100]
-  rows: Admin[] = []
-  dialog = false
 
   max25chars = (v: any) => v.length <= 25 || 'تعداد حروف زیاد است!'
 

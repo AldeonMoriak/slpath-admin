@@ -7,14 +7,23 @@
       class="mx-auto my-12"
     >
       <div class="my-12 mx-auto">
-        <h1 v-if="error.statusCode === 404" class="text-center">
-          {{ pageNotFound }}
-        </h1>
-        <h1 v-else>
-          {{ otherError }}
-        </h1>
         <a href="/"><p class="text-center">صفحه اصلی</p></a>
         <div v-if="error.statusCode === 404">
+          <h1 class="text-center">
+            {{ pageNotFound }}
+          </h1>
+          <lottie-player
+            class="mx-auto"
+            autoplay
+            loop
+            src="/animations/404.json"
+            speed="1"
+          ></lottie-player>
+        </div>
+        <div v-else>
+          <h1 class="text-center">
+            {{ otherError }}
+          </h1>
           <lottie-player
             class="mx-auto"
             autoplay

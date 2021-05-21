@@ -45,8 +45,6 @@
         <template v-slot:[`item.actions`]="{ item }">
           <v-btn
             :key="'edit' + item.id"
-            :loading="item.loading"
-            :disabled="item.loading"
             color="secondary"
             class="secondary--text text--darken-4"
             @click="$router.push(`/categories/${item.id}`)"
@@ -87,6 +85,7 @@ interface Category {
   updateDateTime: Date
   loading: boolean
   rowNumber: number
+  isActive: boolean
 }
 
 interface CategoryResponse {
@@ -113,11 +112,20 @@ export default class Categories extends Vue {
     this.getAllCategories()
   }
 
-  async toggleCategoryActiveness(item: any): Promise<void> {
+  async toggleCategoryActiveness(item: Category): Promise<void> {
+    const categoryIndex = this.rows.findIndex(
+      (category) => category.id === item.id
+    )
+    this.rows[categoryIndex].loading = true
     await this.$axios
       .put(`categories/toggleCategoryActiveness/${item.id}`)
-      .then(() => this.getAllCategories())
+      .then(() => {
+        this.rows[categoryIndex].loading = false
+        this.rows[categoryIndex].isActive = !this.rows[categoryIndex].isActive
+        // this.getAllCategories()
+      })
       .catch((err) => {
+        this.rows[categoryIndex].loading = false
         this.snackbarData = {
           text: err.message ?? err,
           color: 'error',
