@@ -33,7 +33,7 @@
             :key="'toggle' + item.id"
             :loading="item.loading"
             :disabled="item.loading"
-            :color="item.isActive ? 'success' : 'error'"
+            :color="!item.isActive ? 'success' : 'error'"
             @click="toggle(item)"
             >{{ item.isActive ? 'غیرفعال' : 'فعال' }}</v-btn
           >
