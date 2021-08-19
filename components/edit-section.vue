@@ -94,7 +94,7 @@
               max-width="250"
               :src="
                 admin.profilePictureThumbnailUrl
-                  ? `${$axios.defaults.baseURL}image/${admin.profilePictureThumbnailUrl}`
+                  ? `https://kbodliatjlwcgvcbarwj.supabase.in/storage/v1/object/public/tani-images/${admin.profilePictureThumbnailUrl}`
                   : null
               "
             ></v-img

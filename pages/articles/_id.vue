@@ -59,7 +59,7 @@
             class="d-flex justify-center"
             max-height="150"
             max-width="250"
-            :src="`${$axios.defaults.baseURL}articles/image/${article.thumbnailUrl}`"
+            :src="`https://kbodliatjlwcgvcbarwj.supabase.in/storage/v1/object/public/tani-images/${article.thumbnailUrl}`"
           ></v-img
         ></v-col>
       </v-row>
